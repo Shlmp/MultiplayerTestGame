@@ -1,28 +1,33 @@
+using Fusion;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
-    private CharacterController characterController;
-    public float playerSpeed = 2f;
-    private PlayerInputs playerInputs;
+    public float speed = 2f;
+    private Rigidbody2D rb;
+    private BoxCollider2D col;
 
     private void Awake()
     {
-        playerInputs = new PlayerInputs();
-        playerInputs.Player.Enable();
-        gameObject.TryGetComponent(out characterController);
+        rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<BoxCollider2D>();
     }
 
-    void Update()
+    public override void FixedUpdateNetwork()
     {
-        Vector2 moveInput = playerInputs.Player.Movement.ReadValue<Vector2>();
-        Vector2 move = new Vector2(moveInput.x, moveInput.y);
+        if (GetInput<MyInput>(out var inputs) == false) { return; }
 
-        characterController.Move(move * playerSpeed * Time.deltaTime);
+        Debug.Log("Is Moving");
+        Movement();
+    }
 
-        if (move != Vector2.zero)
-        {
-            gameObject.transform.forward = move;
-        }
+    private void Movement()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        Debug.Log("MOVE, Speed is  -  " + speed);
+        Vector2 moveVelocity = new Vector2(horizontalInput * speed * Runner.DeltaTime, verticalInput * speed * Runner.DeltaTime);  //  NEEDS TO BE FIXED
+        rb.linearVelocity = moveVelocity;
     }
 }

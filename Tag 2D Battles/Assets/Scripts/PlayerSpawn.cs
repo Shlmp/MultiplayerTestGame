@@ -1,16 +1,14 @@
 using UnityEngine;
+using Fusion;
 
-public class PlayerSpawn : MonoBehaviour
+public class PlayerSpawn : SimulationBehaviour, IPlayerJoined
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public GameObject playerPrefab;
+    public void PlayerJoined(PlayerRef player)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (player == Runner.LocalPlayer)
+        {
+            Runner.Spawn(playerPrefab, Vector3.up, Quaternion.identity, player);
+        }
     }
 }
