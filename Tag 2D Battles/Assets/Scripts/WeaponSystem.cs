@@ -2,11 +2,7 @@ using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
 
-/// <summary>
-/// Attach to the player prefab (NetworkObject). Handles mouse-aimed hitscan firing for Rifle & SMG.
-/// Shows visual line (raycast bullet) for all clients.
-/// </summary>
-[RequireComponent(typeof(PlayerNetwork))]
+
 public class WeaponSystem : NetworkBehaviour
 {
     public enum WeaponType { Rifle, SMG }
@@ -23,18 +19,16 @@ public class WeaponSystem : NetworkBehaviour
     [Header("References")]
     public Transform muzzlePoint;
     public LayerMask hitMask;
-    public NetworkObject bulletLinePrefab; // Prefab with LineRenderer + script to auto-destroy
+    public NetworkObject bulletLinePrefab;
 
     private float lastFireTime;
     private WeaponType currentWeapon = WeaponType.Rifle;
 
     private Camera mainCamera;
-    private PlayerNetwork pn;
 
     private void Awake()
     {
         mainCamera = Camera.main;
-        pn = GetComponent<PlayerNetwork>();
     }
 
     public override void FixedUpdateNetwork() { }
@@ -83,20 +77,16 @@ public class WeaponSystem : NetworkBehaviour
 
         RaycastHit2D hit = Physics2D.Raycast(origin, dir, range, hitMask);
 
-        // Draw local line for feedback (instant)
         Vector3 endPoint = hit.collider ? (Vector3)hit.point : origin + (Vector3)dir * range;
         DrawLocalBulletLine(origin, endPoint);
 
-        // Local feedback (no daño aquí, el StateAuthority valida con RPC)
     }
 
     private void DrawLocalBulletLine(Vector3 start, Vector3 end)
     {
-        // Simple visual using Debug.DrawLine or a temporary LineRenderer
         Debug.DrawLine(start, end, Color.yellow, 0.1f);
     }
 
-    // Client -> StateAuthority: authoritative shot (validated on host)
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
     void RPC_RequestFire(WeaponType weapon, Vector2 mouseWorldPos, RpcInfo info = default)
     {
@@ -116,7 +106,6 @@ public class WeaponSystem : NetworkBehaviour
 
         Vector3 endPoint = hit.collider ? (Vector3)hit.point : origin + dir * range;
 
-        // ... dentro de RPC_RequestFire en WeaponSystem, después de spawnear:
         if (bulletLinePrefab != null)
         {
             var spawnedNetObj = Runner.Spawn(bulletLinePrefab, origin, Quaternion.identity);
@@ -125,23 +114,7 @@ public class WeaponSystem : NetworkBehaviour
                 var bl = spawnedNetObj.GetComponent<BulletLine>();
                 if (bl != null)
                 {
-                    // Llamada RPC desde StateAuthority -> All para que todos configuren la línea
                     bl.RPC_SetPositions(origin, endPoint);
-                }
-            }
-        }
-
-
-        // If we hit a player, apply damage
-        if (hit.collider != null)
-        {
-            var hitPlayerObj = hit.collider.GetComponentInParent<NetworkObject>();
-            if (hitPlayerObj != null)
-            {
-                var targetPn = hitPlayerObj.GetComponent<PlayerNetwork>();
-                if (targetPn != null)
-                {
-                    targetPn.ApplyDamage(damage, shooterPlayer);
                 }
             }
         }

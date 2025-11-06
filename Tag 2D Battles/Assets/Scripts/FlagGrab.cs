@@ -27,7 +27,7 @@ public class FlagGrab : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.StateAuthority)]
     private void RPC_GrabFlag()
     {
-            transform.SetParent(player.transform);
-            transform.position = new Vector2(transform.parent.position.x, transform.parent.position.y + 1);
+        transform.SetParent(player.transform);
+        transform.position = new Vector2(transform.parent.position.x, transform.parent.position.y + 1);
     }
 }

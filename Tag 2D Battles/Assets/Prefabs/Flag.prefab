@@ -201,8 +201,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2481879485239100637}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fabc55d776b87f2418418c56f83a5ff2, type: 3}
+  m_Script: {fileID: 11500000, guid: 23804838db53204469afe611ee11f0fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _DropReturnTime: 0
-  defaultReturnSeconds: 5

@@ -50,7 +50,6 @@ GameObject:
   - component: {fileID: 8996835658934823234}
   - component: {fileID: -1272876048964690232}
   - component: {fileID: 1656204078840546084}
-  - component: {fileID: -4142433195987554544}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -151,7 +150,6 @@ MonoBehaviour:
   - {fileID: 6449721029378868047}
   - {fileID: -1272876048964690232}
   - {fileID: 1656204078840546084}
-  - {fileID: -4142433195987554544}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &3342844583523801042
 MonoBehaviour:
@@ -265,13 +263,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2594111271595652432}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3950919ccb74b924ba1c49353c4ba418, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ff0a3a564153424a92fa8786da80a15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Team: 0
-  _Health: 9
-  gunHolder: {fileID: 2232592560133844326}
-  flagHoldPoint: {fileID: 6454704890303479490}
+  speed: 2
 --- !u!114 &1656204078840546084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,23 +285,11 @@ MonoBehaviour:
   smgRange: 16
   smgDamage: 12
   smgFireRate: 0.12
+  muzzlePoint: {fileID: 4596362464044834222}
   hitMask:
     serializedVersion: 2
     m_Bits: 0
-  muzzlePoint: {fileID: 4596362464044834222}
-  currentWeapon: 0
---- !u!114 &-4142433195987554544
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2594111271595652432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0501524de94a3f447a5121fd176feded, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  bulletLinePrefab: {fileID: 5448876310714659626, guid: 84bd5b40327750747b8a7af8a6b4efae, type: 3}
 --- !u!1 &4868474263872233963
 GameObject:
   m_ObjectHideFlags: 0
